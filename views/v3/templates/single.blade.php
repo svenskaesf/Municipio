@@ -25,10 +25,10 @@
         ])
 
         @if ($customizer->secondaryNavigationPosition == 'left')
-            @if (!empty($secondaryMenu['items']))
-                <div class="u-margin__bottom--4 u-display--none@xs u-display--none@sm u-display--none@md">
+            @if ($secondaryMenuItems)
+                <div class="u-margin__bottom--4 u-display--none@xs u-display--none@sm">
                     @paper()
-                        @includeIf('partials.navigation.sidebar', ['menuItems' => $secondaryMenu['items']])
+                    @includeIf('partials.navigation.sidebar', ['menuItems' => $secondaryMenuItems])
                     @endpaper
                 </div>
             @endif
@@ -56,32 +56,37 @@
 
     @includeWhen($displayQuicklinksAfterContent, 'partials.navigation.fixed')
 
+    @includeWhen($displaySecondaryQuery, 'partials.secondary', [
+        'posts' => $secondaryQuery->posts ?? [],
+        'postType' => $secondaryPostType ?? null,
+    ])
+
     {!! $hook->loopEnd !!}
 
 @stop
 
 @section('sidebar-right')
-@if ($showSidebars)
-    @if ($customizer->secondaryNavigationPosition == 'right')
-        @if (!empty($secondaryMenu['items']))
-            <div class="u-margin__bottom--4 u-display--none@xs u-display--none@sm u-display--none@md">
-                @paper()
-                    @includeIf('partials.navigation.sidebar', ['menuItems' => $secondaryMenu['items']])
-                @endpaper
-            </div>
+    @if ($showSidebars)
+        @if ($customizer->secondaryNavigationPosition == 'right')
+            @if ($secondaryMenuItems)
+                <div class="u-margin__bottom--4 u-display--none@xs u-display--none@sm u-display--none@md">
+                    @paper()
+                    @includeIf('partials.navigation.sidebar', ['menuItems' => $secondaryMenuItems])
+                    @endpaper
+                </div>
+            @endif
         @endif
     @endif
-@endif
 
-@includeIf('partials.sidebar', ['id' => 'right-sidebar', 'classes' => ['o-grid']])
+    @includeIf('partials.sidebar', ['id' => 'right-sidebar', 'classes' => ['o-grid']])
 @stop
 
 @section('below')
-@includeIf('partials.sidebar', ['id' => 'content-area-bottom', 'classes' => ['o-grid']])
+    @includeIf('partials.sidebar', ['id' => 'content-area-bottom', 'classes' => ['o-grid']])
 
-<!-- Comments -->
-@section('article.comments.before')@show
-@includeIf('partials.comments')
-@section('article.comments.after')@show
+    <!-- Comments -->
+    @section('article.comments.before')@show
+    @includeIf('partials.comments')
+    @section('article.comments.after')@show
 
 @stop
