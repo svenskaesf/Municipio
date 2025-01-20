@@ -1,4 +1,4 @@
-<?php
+<?php //Municipio functions file
 
 define('MUNICIPIO_PATH', get_template_directory() . '/');
 
